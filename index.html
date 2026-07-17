@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Marcador PokeMMO</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    font-family: "Press Start 2P", cursive;
+}
+
+.card-container {
+    display: flex;
+    gap: 28px;
+}
+
+/* ===========================
+        TARJETAS
+=========================== */
+
+.card {
+    width: 280px;
+    height: 500px;
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ===========================
+          BORDES
+=========================== */
+
+.card-verde {
+    border: 2px solid #00d84f;
+    box-shadow: 0 0 10px rgba(0,216,79,.45);
+}
+
+.card-azul {
+    border: 2px solid #2f73ff;
+    box-shadow: 0 0 10px rgba(47,115,255,.45);
+}
+
+.card-roja {
+    border: 2px solid #ff1f52;
+    box-shadow: 0 0 10px rgba(255,31,82,.45);
+}
+
+/* ===========================
+     CABECERA DEGRADADA
+=========================== */
+
+.card-verde::before,
+.card-azul::before,
+.card-roja::before {
+    content: "";
+    width: 100%;
+    height: 135px;
+    flex-shrink: 0;
+}
+
+.card-verde::before {
+    background: linear-gradient(
+        to bottom,
+        #0fbe43 0%,
+        #0d9f39 20%,
+        #0a842f 45%,
+        #06561f 70%,
+        #02190a 88%,
+        #000 100%
+    );
+}
+
+.card-azul::before {
+    background: linear-gradient(
+        to bottom,
+        #4d86ed 0%,
+        #3b73db 20%,
+        #2b5fc3 45%,
+        #1a418d 70%,
+        #081938 88%,
+        #000 100%
+    );
+}
+
+.card-roja::before {
+    background: linear-gradient(
+        to bottom,
+        #ff1458 0%,
+        #db104b 20%,
+        #b50b3b 45%,
+        #7a0627 70%,
+        #26000a 88%,
+        #000 100%
+    );
+}
+
+/* ===========================
+          SPRITES
+=========================== */
+
+.sprite-container {
+    width: 100%;
+    height: 145px;
+    margin-top: -18px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.sprite {
+    width: 170px;
+    image-rendering: pixelated;
+}
+
+/* ===========================
+        NOMBRE EQUIPO
+=========================== */
+
+.team-name {
+    margin-top: 35px;
+    margin-bottom: 0;
+
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px #000;
+}
+
+.card-verde .team-name {
+    color: #00ff66;
+}
+
+.card-azul .team-name {
+    color: #2f73ff;
+}
+
+.card-roja .team-name {
+    color: #ff2962;
+}
+
+/* ===========================
+      LÍNEA SEPARADORA
+=========================== */
+
+.separator {
+    width: 84%;
+    height: 2px;
+    margin-top: 55px;
+}
+
+.card-verde .separator {
+    background: #00ff66;
+    box-shadow: 0 0 3px #00ff66;
+}
+
+.card-azul .separator {
+    background: #2f73ff;
+    box-shadow: 0 0 3px #2f73ff;
+}
+
+.card-roja .separator {
+    background: #ff2962;
+    box-shadow: 0 0 3px #ff2962;
+}
+
+/* ===========================
+          PUNTOS
+=========================== */
+
+.score-container {
+    width: 100%;
+    padding-top: 14px;
+    margin-bottom: 22px;
+}
+
+.score {
+    font-size: 68px;
+    line-height: 1;
+    text-align: center;
+    transition: .15s;
+}
+
+.card-verde .score {
+    color: #00ff66;
+    text-shadow: 0 0 8px #00ff66;
+}
+
+.card-azul .score {
+    color: #2f73ff;
+    text-shadow: 0 0 8px #2f73ff;
+}
+
+.card-roja .score {
+    color: #ff2962;
+    text-shadow: 0 0 8px #ff2962;
+}
+
+.score.bump {
+    transform: scale(1.12);
+}
+
+/* ===========================
+          ESTADO
+=========================== */
+
+.status {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    color: rgba(255,255,255,.6);
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+}
+
+body.connected .status {
+    display: none;
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="card-container">
+
+    <div class="card card-verde">
+      <div class="sprite-container">
+        <img class="sprite" src="venusaur.gif" alt="Venusaur">
+      </div>
+
+      <div class="team-name">Equipo Verde</div>
+
+      <div class="separator"></div>
+
+      <div class="score-container">
+        <div id="score-verde" class="score">0</div>
+      </div>
+    </div>
+
+    <div class="card card-azul">
+      <div class="sprite-container">
+        <img class="sprite" src="blastoise.gif" alt="Blastoise">
+      </div>
+
+      <div class="team-name">Equipo Azul</div>
+      <div class="separator"></div>
+
+      <div class="score-container">
+        <div id="score-azul" class="score">0</div>
+      </div>
+    </div>
+
+    <div class="card card-roja">
+      <div class="sprite-container">
+        <img class="sprite" src="charizard.gif" alt="Charizard">
+      </div>
+
+      <div class="team-name">Equipo Rojo</div>
+      <div class="separator"></div>
+
+      <div class="score-container">
+        <div id="score-rojo" class="score">0</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="status">Conectando a Firebase...</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDlC6cK0o7L99ZVNU1WpdeGVV6ym4rwpiw",
+      authDomain: "contador2k26.firebaseapp.com",
+      databaseURL: "https://contador2k26-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "contador2k26",
+      storageBucket: "contador2k26.firebasestorage.app",
+      messagingSenderId: "211348542156",
+      appId: "1:211348542156:web:5518497309e5c2ec0aa869"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const scoresRef = ref(db, 'puntos');
+
+    const scoreElements = {
+      rojo: document.querySelector('#score-rojo'),
+      verde: document.querySelector('#score-verde'),
+      azul: document.querySelector('#score-azul')
+    };
+
+    const previousValues = { rojo: null, verde: null, azul: null };
+
+    onValue(scoresRef, (snapshot) => {
+      const data = snapshot.val() || {};
+
+      Object.entries(scoreElements).forEach(([team, element]) => {
+        const newValue = data[team] ?? 0;
+
+        if (previousValues[team] !== null && previousValues[team] !== newValue) {
+          element.classList.remove('bump');
+          void element.offsetWidth;
+          element.classList.add('bump');
+        }
+
+        previousValues[team] = newValue;
+        element.textContent = newValue;
+      });
+
+      document.body.classList.add('connected');
+    });
+  </script>
+
+</body>
+
+</html>
