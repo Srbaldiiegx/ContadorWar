@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcador PokeMMO</title>
+  <style>
+    body { margin: 0; min-height: 100vh; background: transparent; font-family: "Segoe UI", Roboto, Arial, sans-serif; display: grid; place-items: center; }
+    .card-container { display: flex; gap: 30px; }
+    .card { width: 300px; height: 500px; border-radius: 25px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; box-sizing: border-box; }
+    .card-verde { background: radial-gradient(circle, #0a1410, #030806); border: 3px solid #00c853; box-shadow: 0 0 15px #00c8534d; }
+    .card-azul { background: radial-gradient(circle, #0a1114, #030608); border: 3px solid #2979ff; box-shadow: 0 0 15px #2979ff4d; }
+    .card-roja { background: radial-gradient(circle, #140a0a, #080303); border: 3px solid #ff1744; box-shadow: 0 0 15px #ff17444d; }
+    .card-verde .team-name, .card-verde .score { color: #00c853; }
+    .card-azul .team-name, .card-azul .score { color: #2979ff; }
+    .card-roja .team-name, .card-roja .score { color: #ff1744; }
+    .sprite-container { display: grid; place-items: center; flex-grow: 1; }
+    .sprite-container img { max-width: 90%; max-height: 90%; object-fit: contain; }
+    .team-name { font-size: 28px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; margin-bottom: 10px; text-shadow: 1px 1px 3px #0008; }
+    .score-container { width: 80%; border-top: 2px solid #ffffff4d; padding-top: 10px; margin-bottom: 20px; }
+    .score { font-size: 72px; font-weight: bold; text-align: center; line-height: 1; text-shadow: 0 0 10px currentColor; }
+    .status { position: fixed; right: 12px; bottom: 8px; color: #fff9; font-size: 12px; }
+    body.connected .status { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <div class="card card-verde"><div class="sprite-container"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="Venusaur"></div><div class="team-name">Equipo verde</div><div class="score-container"><div id="score-verde" class="score">0</div></div></div>
+    <div class="card card-azul"><div class="sprite-container"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png" alt="Blastoise"></div><div class="team-name">Equipo azul</div><div class="score-container"><div id="score-azul" class="score">0</div></div></div>
+    <div class="card card-roja"><div class="sprite-container"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png" alt="Charizard"></div><div class="team-name">Equipo rojo</div><div class="score-container"><div id="score-rojo" class="score">0</div></div></div>
+  </div>
+  <div class="status">Conectando al marcador…</div>
+  <script>
+    const scores = { rojo: document.querySelector('#score-rojo'), verde: document.querySelector('#score-verde'), azul: document.querySelector('#score-azul') };
+    function paint(data) { Object.entries(scores).forEach(([team, element]) => element.textContent = data[team] ?? 0); }
+    function connect() {
+      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const socket = new WebSocket(`${protocol}//${location.host}`);
+      socket.addEventListener('message', event => { try { paint(JSON.parse(event.data)); document.body.classList.add('connected'); } catch (_) {} });
+      socket.addEventListener('close', () => { document.body.classList.remove('connected'); setTimeout(connect, 2000); });
+    }
+    connect();
+  </script>
+</body>
+</html>
