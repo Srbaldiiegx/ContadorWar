@@ -15,6 +15,13 @@ const client = new tmi.Client({
   channels: ['srbaldiiegx']
 });
 
+const http = require('http');
+// Crea un servidor básico que responde 200 OK para que Render sepa que está vivo
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Bot activo');
+}).listen(process.env.PORT || 3000);
+
 client.connect();
 
 client.on('message', (channel, tags, message, self) => {
