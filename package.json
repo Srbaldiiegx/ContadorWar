@@ -1,0 +1,10 @@
+{
+  "name": "bot-twitch",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "dependencies": {
+    "tmi.js": "^1.8.5",
+    "firebase-admin": "^11.0.0"
+  },
+  "scripts": { "start": "node bot.js" }
+}
